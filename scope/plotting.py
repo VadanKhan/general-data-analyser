@@ -6,25 +6,24 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Define the input files, output files, number of columns, column names, and other parameters
-N = 10  # select every Nth row
-M = 12  # number of rows to skip
+N = 1  # select every Nth row
+M = 1  # number of rows to skip
 
-INPUT_FILE1 = "scopetest-elec-x-sum2.csv"
+INPUT_FILE1 = "psd-bandwidth-2.csv"
 NUM_COLUMNS_1 = 3  # number of columns (2 or 3)
-COLUMN_TO_ANALYZE_1 = 'CH1'  # column to analyze
+COLUMN_TO_ANALYZE_1 = 'CH2'  # column to analyze
 
 INPUT_FILE2 = "scopetest-laser-x-sum.csv"
 NUM_COLUMNS_2 = 3  # number of columns (2 or 3)
 COLUMN_TO_ANALYZE_2 = 'CH1'  # column to analyze
 
-NAME = "X Signal (Laser on-off comparison)"
+NAME = "Frequency Response of Thorlabs PSD PDP90A"
 
+TRIM_DATA = False
 OUTPUT_FILE1 = "trimmed_" + INPUT_FILE1
 OUTPUT_FILE2 = "trimmed_" + INPUT_FILE2
 
-REMOVE_OFFSET = True  # to remove any offset in channel data
-
-
+REMOVE_OFFSET = False  # to remove any offset in channel data
 
 # Function to read a csv file, process the data, and plot the signal
 def filter_and_plot(INPUT_FILE, OUTPUT_FILE, num_columns, column_to_analyse, label):
@@ -59,27 +58,42 @@ def filter_and_plot(INPUT_FILE, OUTPUT_FILE, num_columns, column_to_analyse, lab
     plt.plot(df[columns[0]], df[column_to_analyse], label=label)
 
 # Process and plot the signals from the two csv files
-filter_and_plot(INPUT_FILE1, OUTPUT_FILE1, NUM_COLUMNS_1, COLUMN_TO_ANALYZE_1, f'Laser Off')
-filter_and_plot(INPUT_FILE2, OUTPUT_FILE2, NUM_COLUMNS_2, COLUMN_TO_ANALYZE_2, f'Laser On')
+filter_and_plot(INPUT_FILE1, OUTPUT_FILE1, NUM_COLUMNS_1, COLUMN_TO_ANALYZE_1, f'Gain')
+# filter_and_plot(INPUT_FILE2, OUTPUT_FILE2, NUM_COLUMNS_2, COLUMN_TO_ANALYZE_2, f'Laser On')
 
-plt.title(f'{NAME} plot of every {N}th value')
+plt.title(f'{NAME}')
 
-plt.xlabel("Seconds")
-if REMOVE_OFFSET:
-    plt.ylabel('Voltage (Offset Normalised)')
-else:
-    plt.ylabel('Voltage')
+# plt.xlabel("Seconds")
+# if REMOVE_OFFSET:
+#     plt.ylabel('Voltage (Offset Normalised)')
+# else:
+#     plt.ylabel('Voltage')
+# plt.legend()
+
+plt.xlabel("Frequency (kHz)")
+# plt.xlim([0, 100])
+plt.axhline(y=1, color='red', linestyle='--', label='Peak Responsivity')
+NOISE_CUTOFF = 15
+plt.axvline(x=NOISE_CUTOFF, color='grey', linestyle='--', label='Manufacturer Stated Limit')
+plt.fill_betweenx(plt.ylim(), NOISE_CUTOFF, plt.xlim()[1], color='gray', alpha=0.1)
+plt.xscale('log')
+plt.ylabel('Gain')
+plt.yscale('log')
+
 plt.legend()
 
 # Create the figures directory if it doesn't exist
 if not os.path.exists('figures'):
     os.makedirs('figures')
-
+    
 # Save the figure in the figures directory
 plt.savefig(f'figures/{NAME}.png')
 
-# Print success messages
-print(f"The trimmed dataframe was successfully saved to {OUTPUT_FILE1}.")
-print(f"The trimmed dataframe was successfully saved to {OUTPUT_FILE2}.")
+if TRIM_DATA:
+    # Save the figure in the figures directory
+    plt.savefig(f'figures/{NAME}.png')
+    # Print success messages
+    print(f"The trimmed dataframe was successfully saved to {OUTPUT_FILE1}.")
+    print(f"The trimmed dataframe was successfully saved to {OUTPUT_FILE2}.")
 
 plt.show()
