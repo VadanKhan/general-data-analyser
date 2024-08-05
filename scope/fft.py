@@ -11,19 +11,19 @@ warnings.filterwarnings('ignore')
 N = 1  # select every Nth row
 M = 12  # number of rows to skip
 
-INPUT_FILE1 = "scopetest-laser-x-sum.csv"
-NUM_COLUMNS_1 = 3  # number of columns (2 or 3)
+INPUT_FILE1 = "CSV-POS-L.csv"
+NUM_COLUMNS_1 = 2  # number of columns (2 or 3)
 COLUMN_TO_ANALYZE_1 = 'CH1'  # column to analyze
 
-INPUT_FILE2 = "scopetest-laser-sum.csv"
+INPUT_FILE2 = "CSV-SUM-L.csv"
 NUM_COLUMNS_2 = 2  # number of columns (2 or 3)
 COLUMN_TO_ANALYZE_2 = 'CH1'  # column to analyze
 
-INPUT_FILE3 = "scopetest-elec-sum.csv"
+INPUT_FILE3 = "CSV-ELEC-L.csv"
 NUM_COLUMNS_3 = 2  # number of columns (2 or 3)
 COLUMN_TO_ANALYZE_3 = 'CH1'  # column to analyze
 
-NAME = "X signal to SUM to Noise signal"
+NAME = "SUM signal to Noise signal"
 
 NORMALIZE_FFT = False  # set to True to normalize the FFT based on the peak non-zero frequency
 REMOVE_OFFSET = True  # to remove any offset in channel data
@@ -78,7 +78,7 @@ def fft_and_plot(INPUT_FILE, num_columns, column_to_analyse, label):
     plt.plot(peak_frequency, peak_value, 'rx', markersize=10)
 
 # Process and plot the FFTs of the signals from the two csv files
-fft_and_plot(INPUT_FILE1, NUM_COLUMNS_1, COLUMN_TO_ANALYZE_1, 'X signal')
+# fft_and_plot(INPUT_FILE1, NUM_COLUMNS_1, COLUMN_TO_ANALYZE_1, 'X signal')
 fft_and_plot(INPUT_FILE2, NUM_COLUMNS_2, COLUMN_TO_ANALYZE_2, 'SUM')
 fft_and_plot(INPUT_FILE3, NUM_COLUMNS_3, COLUMN_TO_ANALYZE_3, 'Electronic Noise')
 
