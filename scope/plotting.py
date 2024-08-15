@@ -9,15 +9,15 @@ warnings.filterwarnings('ignore')
 N = 100  # select every Nth row
 M = 12  # number of rows to skip
 
-INPUT_FILE1 = "CSV-SUM-L.csv"
-NUM_COLUMNS_1 = 2  # number of columns (2 or 3)
+INPUT_FILE1 = "CSV-ESPDEL.csv"
+NUM_COLUMNS_1 = 3  # number of columns (2 or 3)
 COLUMN_TO_ANALYZE_1 = 'CH1'  # column to analyze
 
-INPUT_FILE2 = "CSV-ELEC-L.csv"
-NUM_COLUMNS_2 = 2  # number of columns (2 or 3)
-COLUMN_TO_ANALYZE_2 = 'CH1'  # column to analyze
+INPUT_FILE2 = "CSV-ESPDEL.csv"
+NUM_COLUMNS_2 = 3  # number of columns (2 or 3)
+COLUMN_TO_ANALYZE_2 = 'CH2'  # column to analyze
 
-NAME = "SUM Signal"
+NAME = "MCU (ESP32s2) ADC - DAC delay"
 
 TRIM_DATA = False
 OUTPUT_FILE1 = "trimmed_" + INPUT_FILE1
@@ -58,8 +58,8 @@ def filter_and_plot(INPUT_FILE, OUTPUT_FILE, num_columns, column_to_analyse, lab
     plt.plot(df[columns[0]], df[column_to_analyse], label=label)
 
 # Process and plot the signals from the two csv files
-filter_and_plot(INPUT_FILE1, OUTPUT_FILE1, NUM_COLUMNS_1, COLUMN_TO_ANALYZE_1, f'SUM Signal')
-# filter_and_plot(INPUT_FILE2, OUTPUT_FILE2, NUM_COLUMNS_2, COLUMN_TO_ANALYZE_2, f'Electronic Signal')
+filter_and_plot(INPUT_FILE1, OUTPUT_FILE1, NUM_COLUMNS_1, COLUMN_TO_ANALYZE_1, f'ADC Input Signal')
+filter_and_plot(INPUT_FILE2, OUTPUT_FILE2, NUM_COLUMNS_2, COLUMN_TO_ANALYZE_2, f'DAC output Signal')
 
 plt.title(f'{NAME}')
 
@@ -70,17 +70,27 @@ else:
     plt.ylabel('Voltage')
 plt.legend()
 
-# plt.xlabel("Frequency (kHz)")
-# plt.xlim([0, 20])
-# plt.axhline(y=1, color='red', linestyle='--', label='Peak Responsivity')
-# NOISE_CUTOFF = 15
-# plt.axvline(x=NOISE_CUTOFF, color='grey', linestyle='--', label='Manufacturer Stated Limit (15kHz)')
-# plt.fill_betweenx(plt.ylim(), NOISE_CUTOFF, plt.xlim()[1], color='gray', alpha=0.1)
-# # plt.xscale('log')
-# plt.ylabel('Gain')
-# # plt.yscale('log')
+# plt.xlabel("Frequency (Hz)")
+# plt.xlim([50, 10000])
+# plt.ylim([9, 1000])
+# plt.xscale('log')
+# plt.ylabel(r'Beam Motion ($\mu$m)')
+# plt.yscale('log')
 
-plt.legend()
+# plt.axvline(x=NOISE_CUTOFF, color='grey', linestyle='--', label='Manufacturer Stated Limit (15kHz)')
+# plt.fill_betweenx(plt.ylim(), NOISE_CUTOFF, plt.xlim(), color='gray', alpha=0.1)
+
+# CALCULATED_POSITION = 360
+# UNCERTAINTY_POSITION = 100
+# plt.fill_between(plt.xlim(), CALCULATED_POSITION - UNCERTAINTY_POSITION, CALCULATED_POSITION + UNCERTAINTY_POSITION, 
+#                  color='red', alpha=0.15)
+# plt.axhline(y=CALCULATED_POSITION, color='red', linestyle='--', label=r'Specification Expected Amplitude: 360$\mu$m')
+# plt.plot(900, 700, '.', label='Resonance 1: 900Hz', markersize=10, markeredgewidth=0.01)  # Corrected the fmt argument
+# plt.plot(2600, 810, '.', label='Resonance 2: 2600Hz', markersize=10, markeredgewidth=0.01)  # Corrected the fmt argument
+# plt.plot(3500, 90, 'X', label='First -5dB Point: 3500Hz', markersize=10, markeredgewidth=0.01)  # Corrected the fmt argument
+# plt.axhline(y=10, color='gray', linestyle='--', label='Electronic Noise in Position Reading')
+
+# plt.legend(loc='center left',bbox_to_anchor=(0.0, 0.3), fontsize=10)
 
 # Create the figures directory if it doesn't exist
 if not os.path.exists('figures'):
