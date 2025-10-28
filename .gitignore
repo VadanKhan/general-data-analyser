@@ -1,5 +1,21 @@
-# Ignore all data files
+# Ignore all root directory data files
 *.csv
 
-# Ignore the contents of the figures folder
-figures/
+# ignore bad files
+scope/txtplotter*.py
+
+# Ignore the contents of these folders
+# Use a wildcard (*) to ignore all files/folders inside
+figures/*
+data/*
+
+# Use an exclamation mark (!) to un-ignore the .gitkeep files
+!figures/.gitkeep
+!data/.gitkeep
+!scope/txtplotter.py
+
+# ignore local build files
+pdm.lock
+poetry.lock
+.pdm-python
+.vscode
