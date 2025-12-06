@@ -12,6 +12,7 @@ from pathlib import Path
 DATA_FOLDER = Path("data/")
 FIGURES_FOLDER = Path("figures/")
 NAME = "lithium_cs"
+TITLE = None
 
 # pio.renderers.default = "vscode"
 
@@ -35,7 +36,7 @@ except IndexError:
     exit()
 
 plt.plot(x_data1 / 1E6, y_data1, '-', color='blue', label='$^6$Li')
-plt.plot(x_data2 / 1E6, y_data2, '-', color='darkgreen', label='$^7$Li')
+plt.plot(x_data2 / 1E6, y_data2, '-', color='red', label='$^7$Li')
 
 # plt.xlim(0, 15)
 plt.ylim(1E-4, 1E1)
@@ -43,7 +44,7 @@ plt.grid()
 plt.yscale('log')
 plt.legend()
 
-plt.title('Tritium Production Cross Sections of Lithium Isotopes')
+plt.title(TITLE)
 plt.xlabel('Incident Neutron Energy (MeV)')
 plt.ylabel('$\\sigma$ (barns)')
 
